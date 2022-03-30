@@ -1,13 +1,21 @@
-import { useState } from "react";
 import { useRouter } from "next/router";
+import { useRecoilState } from "recoil";
+import {
+  inputTitleState,
+  inputContentState,
+  statusState,
+  todosState,
+} from "../../components/atoms";
 
 export default function Create() {
   //入力したタイトルの値を可変にする
-  const [inputTitle, setInputTitle] = useState("");
-  //入力した内容の値を可変にする
-  const [inputContent, setInputContent] = useState("");
+  const [inputTitle, setInputTitle] = useRecoilState(inputTitleState);
+  //入力したコンテントの値を可変にする
+  const [inputContent, setInputContent] = useRecoilState(inputContentState);
+  //選択したプルダウンの値を可変にする
+  const [status, setStatus] = useRecoilState(statusState);
   //入力した値を貯めていくtodoの配列
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useRecoilState(todosState);
   //ステータス変更用プルダウンの値の定義
   const filterOptions = [
     { value: "incomplete", label: "未完了" },
@@ -29,49 +37,25 @@ export default function Create() {
 
   const addTodo = (e) => {
     e.preventDefault();
-    if (inputTitle || inputContent === "") return;
-    // 変数todoにid, status, title, contentのプロパティを設定する;
+    //コンテントの中身が空の場合はボタン押下時にイベントが発火しない
+    if (inputContent === "") return;
+    // 変数todoにid, status, title, contentのプロパティを設定する
     const todo = {
       id: todos.length + 1,
-      status: { filterOptions: label },
       title: inputTitle,
       content: inputContent,
     };
+    console.log(todo);
     setTodos((todos) => [...todos, todo]);
     setInputTitle("");
     setInputContent("");
+    router.push("/todos");
   };
-
-  // const handleClick = (e) => {
-  //   e.preventDefault();
-  //   if (title || content === "") return;
-  //   //変数todoを定義してid,status,title,contentのプロパティを設定する
-  //   const todo = {
-  //     id: todos.length + 1,
-  //     status: { filterOptions: value },
-  //     title: inputTitle,
-  //     content: inputContent,
-  //   };
-  //   setTodos((todos) => [...todos, todo]);
-  //   setInputTitle("");
-  //   setInputContent("");
-  //   router.push("/todos");
-  // };
 
   return (
     <>
       <h1>入力画面</h1>
       <div className="form">
-        <p>
-          ステータス：
-          <select>
-            {filterOptions.map(({ value, label }) => (
-              <option name="status" value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
-        </p>
         <p>
           タイトル：
           <input
@@ -90,13 +74,23 @@ export default function Create() {
           />
         </p>
         {/* ボタンを押すことでtodo一覧ページに遷移＆遷移先でも値を保持したままにする */}
-        {/* <button onClick={handleClick}>追加</button> */}
         <button onClick={addTodo}>追加</button>
       </div>
       <ul>
         {todos.map((todo) => (
           <li key={todo.id}>
-            {todo.status}
+            <p>
+              ステータス：
+              <select
+                onChange={(e) => setStatus(e.target.selectedOptions[0].text)}
+              >
+                {filterOptions.map((filterOption, index) => (
+                  <option key={index} name="status" value={filterOption.value}>
+                    {filterOption.label}
+                  </option>
+                ))}
+              </select>
+            </p>
             {todo.title}
             {todo.content}
           </li>
