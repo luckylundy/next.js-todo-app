@@ -6,6 +6,7 @@ import {
   inputContentState,
   statusState,
   todosState,
+  todoDetailState,
 } from "../../components/atoms";
 
 export default function Todos() {
@@ -23,8 +24,17 @@ export default function Todos() {
     { value: "inProgress", label: "途中" },
     { value: "complete", label: "完了" },
   ];
-  //useRouterを利用してボタンクリック時に画面遷移する
+  //useRouterを利用して特定のクエリパラメータを取得
   const router = useRouter();
+  //詳細ページに遷移するためのtodoの情報を設定するstate
+  const [todoDetail, setTodoDetail] = useRecoilState(todoDetailState);
+
+  const onClickDetail = () => {
+    //最初にtodoを定義してからsetTodoDetailに代入
+
+    setTodoDetail(todos.find((todo) => todo.id === router.query.id));
+    console.log(setTodoDetail);
+  };
 
   return (
     <>
@@ -57,13 +67,8 @@ export default function Todos() {
                 内容：
                 {todo.content}
               </p>
-              <Link
-                href={{
-                  pathname: "/pages/[id]",
-                  query: `id: ${todo.id}`,
-                }}
-              >
-                <a>TODO詳細に行く</a>
+              <Link href="/todos/[id]" as={`/todos/${todo.id}`}>
+                <a onClick={onClickDetail}>TODO詳細に行く</a>
               </Link>
             </li>
           ))}
