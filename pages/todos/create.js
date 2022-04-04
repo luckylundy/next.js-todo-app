@@ -13,7 +13,7 @@ export default function Create() {
   //入力したコンテントの値を可変にする
   const [inputContent, setInputContent] = useRecoilState(inputContentState);
   //選択したプルダウンの値を可変にする
-  const [status, setStatus] = useRecoilState(statusState);
+  // const [status, setStatus] = useRecoilState(statusState);
   //入力した値を貯めていくtodoの配列
   const [todos, setTodos] = useRecoilState(todosState);
   //ステータス変更用プルダウンの値の定義
@@ -39,9 +39,11 @@ export default function Create() {
     e.preventDefault();
     //コンテントの中身が空の場合はボタン押下時にイベントが発火しない
     if (inputContent === "") return;
-    // 変数todoにid, status, title, contentのプロパティを設定する
+    //変数todoにid, status, title, contentのプロパティを設定する
+    //statusは「未完了」を初期値として設定
     const todo = {
       id: todos.length + 1,
+      status: "incomplete",
       title: inputTitle,
       content: inputContent,
     };

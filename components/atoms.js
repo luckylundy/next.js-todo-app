@@ -13,10 +13,10 @@ export const inputContentState = atom({
 });
 
 //選択したプルダウンの値
-export const statusState = atom({
-  key: "status",
-  default: "",
-});
+// export const statusState = atom({
+//   key: "status",
+//   default: { value: "incomplete", label: "未完了" },
+// });
 
 //入力したtodoの配列
 export const todosState = atom({
