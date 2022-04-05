@@ -23,9 +23,3 @@ export const todosState = atom({
   key: "todos",
   default: [],
 });
-
-//詳細ページに遷移するためのtodoの情報を取得
-export const todoDetailState = atom({
-  key: "todoDetail",
-  default: {},
-});

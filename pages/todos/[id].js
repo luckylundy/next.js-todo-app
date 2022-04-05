@@ -1,33 +1,45 @@
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  inputTitleState,
-  inputContentState,
-  statusState,
-  todosState,
-  todoDetailState,
-} from "../../components/atoms";
+import { todosState } from "../../components/atoms";
 
 export default function detail() {
-  //入力したタイトルの値を可変にする
-  const [inputTitle, setInputTitle] = useRecoilState(inputTitleState);
-  //入力したコンテントの値を可変にする
-  const [inputContent, setInputContent] = useRecoilState(inputContentState);
-  //選択したプルダウンの値を可変にする
-  // const [status, setStatus] = useRecoilState(statusState);
+  //渡されたquery.idを取得するためにuseRouterを使用
+  const router = useRouter();
+  const query = router.query;
   //入力した値を貯めていくtodoの配列
   const [todos, setTodos] = useRecoilState(todosState);
-  //ステータス変更用プルダウンの値の定義
-  const filterOptions = [
-    { value: "incomplete", label: "未完了" },
-    { value: "inProgress", label: "途中" },
-    { value: "complete", label: "完了" },
-  ];
-  const todoDetail = useRecoilValue(todoDetailState);
+  //特定のtodoに絞り込むためのstateを設定
+  // const [todoDetail, setTodoDetail] = useState({});
+  //渡されたidと一致するidを持つtodo(最初に一致したもの)を取得、idが渡されていなければ一覧ページに遷移
+  // useEffect(() => {
+  //   if (router.query.id) {
+  //     setTodoDetail(todos.find((todo) => todo.id === router.query.id));
+  //   } else {
+  //     router.push("/");
+  //   }
+  //   console.log(todoDetail);
+  // }, []);
 
   return (
     <>
       <h1>TODO詳細</h1>
-      {/* <p>{console.log({ todoDetail })}</p> */}
+      <p>
+        ID:
+        {query.id}
+      </p>
+      <p>
+        ステータス：
+        {query.status}
+      </p>
+      <p>
+        タイトル：
+        {query.title}
+      </p>
+      <p>
+        内容：
+        {query.content}
+      </p>
     </>
   );
 }
