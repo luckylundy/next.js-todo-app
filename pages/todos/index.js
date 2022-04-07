@@ -28,6 +28,17 @@ export default function Todos() {
   const handleClickEdit = (todo) => {
     setEditTodo(todo);
   };
+  //todoを削除する
+  const onClickDelete = (rtodoId) => {
+    //todo内で「押下されたtodoのidがtodoIdとひとしくないもの」を抽出し、定数に代入
+    const removedTodos = todos.filter((todo) => {
+      if (todo.id !== rtodoId) {
+        return true;
+      }
+    });
+    //todosを更新する関数にフィルタリングした定数を代入して更新
+    setTodos(removedTodos);
+  };
 
   return (
     <>
@@ -79,6 +90,10 @@ export default function Todos() {
                   編集する
                 </a>
               </Link>
+              <a className="delete-link" onClick={() => onClickDelete(todo.id)}>
+                {/* <a className="delete-link" onClick={() => console.log(todo.id)}> */}
+                削除する
+              </a>
             </li>
           ))}
         </ul>
@@ -105,6 +120,10 @@ export default function Todos() {
           }
           .edit-link {
             color: blue;
+          }
+          .delete-link {
+            color: red;
+            cursor: pointer;
           }
           .create-link-p {
             margin-top: 40px;
