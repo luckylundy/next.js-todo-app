@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useRecoilValue } from "recoil";
 import { todosState } from "../../components/atoms";
 
-export default function detail() {
+export default function Detail() {
   //渡されたqueryの値を取得するためにuseRouterを使用
   const router = useRouter();
   const query = router.query;
