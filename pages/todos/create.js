@@ -1,27 +1,16 @@
+import Link from "next/link";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
-import {
-  inputTitleState,
-  inputContentState,
-  statusState,
-  todosState,
-} from "../../components/atoms";
+import { todosState } from "../../components/atoms";
 
 export default function Create() {
   //入力したタイトルの値を可変にする
-  const [inputTitle, setInputTitle] = useRecoilState(inputTitleState);
+  const [inputTitle, setInputTitle] = useState("");
   //入力したコンテントの値を可変にする
-  const [inputContent, setInputContent] = useRecoilState(inputContentState);
-  //選択したプルダウンの値を可変にする
-  // const [status, setStatus] = useRecoilState(statusState);
+  const [inputContent, setInputContent] = useState("");
   //入力した値を貯めていくtodoの配列
   const [todos, setTodos] = useRecoilState(todosState);
-  //ステータス変更用プルダウンの値の定義
-  const filterOptions = [
-    { value: "incomplete", label: "未完了" },
-    { value: "inProgress", label: "途中" },
-    { value: "complete", label: "完了" },
-  ];
   //useRouterを利用してボタンクリック時に画面遷移する
   const router = useRouter();
 
@@ -37,13 +26,13 @@ export default function Create() {
 
   const addTodo = (e) => {
     e.preventDefault();
-    //コンテントの中身が空の場合はボタン押下時にイベントが発火しない
-    if (inputContent === "") return;
+    // 空欄が一か所でもあればonClickイベントを発火させない
+    if (!inputTitle || !inputContent) return;
     //変数todoにid, status, title, contentのプロパティを設定する
     //statusは「未完了」を初期値として設定
     const todo = {
       id: todos.length + 1,
-      status: "incomplete",
+      status: "未着手",
       title: inputTitle,
       content: inputContent,
     };
@@ -77,27 +66,23 @@ export default function Create() {
         </p>
         {/* ボタンを押すことでtodo一覧ページに遷移＆遷移先でも値を保持したままにする */}
         <button onClick={addTodo}>追加</button>
+        <p className="todoList-link-p">
+          <Link href="/todos">
+            <a className="todoList-link">一覧に戻る</a>
+          </Link>
+        </p>
       </div>
-      <ul>
-        {todos.map((todo) => (
-          <li key={todo.id}>
-            <p>
-              ステータス：
-              <select
-                onChange={(e) => setStatus(e.target.selectedOptions[0].text)}
-              >
-                {filterOptions.map((filterOption, index) => (
-                  <option key={index} name="status" value={filterOption.value}>
-                    {filterOption.label}
-                  </option>
-                ))}
-              </select>
-            </p>
-            {todo.title}
-            {todo.content}
-          </li>
-        ))}
-      </ul>
+
+      <style jsx>
+        {`
+          .todoList-link-p {
+            margin: 40px 0 0;
+          }
+          .todoList-link {
+            font-weight: bold;
+          }
+        `}
+      </style>
     </>
   );
 }

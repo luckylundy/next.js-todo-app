@@ -1,25 +1,18 @@
 import { atom } from "recoil";
+import { recoilPersist } from "recoil-persist";
 
-//入力したタイトルの値
-export const inputTitleState = atom({
-  key: "inputTitle",
-  default: "",
-});
-
-//入力したコンテントの値
-export const inputContentState = atom({
-  key: "inputContent",
-  default: "",
-});
-
-//選択したプルダウンの値
-// export const statusState = atom({
-//   key: "status",
-//   default: { value: "incomplete", label: "未完了" },
-// });
+const { persistAtom } = recoilPersist();
 
 //入力したtodoの配列
 export const todosState = atom({
   key: "todos",
   default: [],
+  effects_UNSTABLE: [persistAtom],
+});
+
+//編集するtodoの状態を保持
+export const editTodoState = atom({
+  key: "editTodo",
+  default: {},
+  effects_UNSTABLE: [persistAtom],
 });
