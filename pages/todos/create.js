@@ -31,12 +31,11 @@ export default function Create() {
     //変数todoにid, status, title, contentのプロパティを設定する
     //statusは「未完了」を初期値として設定
     const todo = {
-      id: todos.length + 1,
+      id: new Date(),
       status: "未着手",
       title: inputTitle,
       content: inputContent,
     };
-    console.log(todo);
     setTodos((todos) => [...todos, todo]);
     setInputTitle("");
     setInputContent("");
